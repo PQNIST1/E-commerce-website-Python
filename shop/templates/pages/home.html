@@ -1,0 +1,949 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- 
+    - primary meta tag
+  -->
+  <title>Woodex - Get Quality Furniture</title>
+  <meta name="title" content="Woodex - Get Quality Furniture">
+  <meta name="description" content="This is an eCommerce html template made by codewithsadee">
+
+  <!-- 
+    - favicon
+  -->
+  <link rel="shortcut icon" href="{% static  'svg/favicon.svg'%}" type="image/svg+xml">
+
+  <!-- 
+    - custom css link
+  -->
+  <link rel="stylesheet" href="{% static 'css_t/styles.css' %}">
+  
+
+  <!-- 
+    - google font link
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mr+De+Haviland&family=Roboto:wght@400;500;700&display=swap"
+    rel="stylesheet">
+
+  <!-- 
+    - preload images
+  -->
+  {% comment %} <link rel="preload" as="image" href="{% static 'images/hero-product-1.jpg' %}">
+  <link rel="preload" as="image" href="./assets/images/hero-product-2.jpg">
+  <link rel="preload" as="image" href="./assets/images/hero-product-3.jpg">
+  <link rel="preload" as="image" href="./assets/images/hero-product-4.jpg">
+  <link rel="preload" as="image" href="./assets/images/hero-product-5.jpg"> {% endcomment %}
+  <style>
+    .modal {
+      display: none; 
+      position: fixed; 
+      z-index: 1; 
+      top: 70px;
+      width: 200px;
+      height: 80px; 
+      overflow: auto; 
+      background-color: grey; 
+    }
+    
+    /* CSS cho nội dung của cửa sổ modal */
+    .modal-content {
+      background-color: #fefefe;
+      border: 1px solid #888;
+      width: 100%; 
+    }
+    
+    /* CSS cho nút đóng modal */
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    html {
+      font-family: var(--ff-roboto);
+      font-size: 10px;
+      scroll-behavior: smooth;
+    }
+    body {
+      background-color: var(--white);
+      color: var(--black);
+      font-size: 1.6rem;
+      line-height: 1.7;
+    }
+    
+    body.active { overflow: hidden; }
+    .logo {
+      font-size: 3.3rem;
+      font-weight: var(--fw-700);
+    }
+    .modal-icon{
+      margin: 5px 5px 5px 10px;
+      display:flex;
+      width:190px;
+      height:25px;
+    }
+    .modal-icon img{
+      margin-right:5px;
+      width:25px;
+      height:25px;
+    }
+</style>
+</head>
+
+<body id="top">
+
+  <!-- 
+    - #HEADER
+  -->
+
+  <header class="header" data-header>
+    <div class="container">
+
+      <div class="input-wrapper">
+        <input type="search" name="search" placeholder="Search Anything..." class="input-field" id="searchInput">
+
+        <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
+      </div>
+
+      <a href="/" class="logo">Woodex</a>
+
+      <div class="header-action">
+
+        {% if username %}
+              <p id="openModalBtn"> {{username}}</p>
+              <div id="myModal" class="modal">
+                <div class="modal-content">
+                  <a class="modal-icon" href="{% url 'info' %}"><img src="{% static 'images/id-card.png' %} ">Thông tin cá nhân</a>
+                  <a class="modal-icon" href="{% url 'logout' %}"><img src="{% static 'images/logout.png' %}">Đăng xuất</a>
+                  <a class="modal-icon" href="{% url 'user_order' %}"><img src="{% static 'images/id-card.png' %}">Order</a>
+                </div>
+              </div>
+        {% else %}
+            <button class="header-action-btn" aria-label="user">
+              <a href="{% url 'login' %}"><ion-icon name="person-outline" aria-hidden="true"></ion-icon></a>
+            </button>
+        {% endif %}
+        
+      
+        {% if username %}
+        <button class="header-action-btn" aria-label="cart">
+          <a href="{% url 'cart' %}"><ion-icon name="bag-handle-outline" aria-hidden="true"></ion-icon></a>
+          <span class="btn-badge" id="cartItemCount">{{total_quantity}}</span>
+        </button>
+        {% else %}
+        <button class="header-action-btn" aria-label="cart">
+          <ion-icon name="bag-handle-outline" aria-hidden="true"></ion-icon>
+        </button>
+        {% endif %}
+        <button class="header-action-btn" aria-label="open menu" data-nav-toggler>
+          <ion-icon name="menu-outline" aria-hidden="true"></ion-icon>
+        </button>
+
+      </div>
+
+    </div>
+  </header>
+
+
+
+
+
+  <!-- 
+    - #SIDEBAR
+  -->
+
+  <div class="sidebar" data-navbar>
+
+    <button class="nav-close-btn" aria-label="close menu" data-nav-toggler>
+      <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
+    </button>
+
+    <div class="wrapper">
+
+      <ul class="sidebar-list">
+
+        <li>
+          <p class="sidebar-list-title">Language</p>
+        </li>
+
+        <li>
+          <a href="#" class="sidebar-link">English</a>
+        </li>
+
+        <li>
+          <a href="#" class="sidebar-link">French</a>
+        </li>
+
+        <li>
+          <a href="#" class="sidebar-link">Arabric</a>
+        </li>
+
+      </ul>
+
+      <ul class="sidebar-list">
+
+        <li>
+          <p class="sidebar-list-title">Currency</p>
+        </li>
+
+        <li>
+          <a href="#" class="sidebar-link">USD - US Dollar</a>
+        </li>
+
+        <li>
+          <a href="#" class="sidebar-link">Euro</a>
+        </li>
+
+        <li>
+          <a href="#" class="sidebar-link">Pound</a>
+        </li>
+
+      </ul>
+
+    </div>
+
+    <nav class="navbar">
+      <ul class="navbar-list">
+
+        <li class="navbar-item">
+          <a href="#home" class="navbar-link" data-nav-link>Home</a>
+        </li>
+
+        <li class="navbar-item">
+          <a href="#about" class="navbar-link" data-nav-link>About</a>
+        </li>
+
+        <li class="navbar-item">
+          <a href="#product" class="navbar-link" data-nav-link>Product</a>
+        </li>
+
+        <li class="navbar-item">
+          <a href="#blog" class="navbar-link" data-nav-link>Blogs</a>
+        </li>
+
+      </ul>
+    </nav>
+
+    <ul class="contact-list">
+
+      <li>
+        <p class="contact-list-title">Contact Us</p>
+      </li>
+
+      <li class="contact-item">
+        <address class="address">
+          69 Halsey St, Ny 10002, New York, United States
+        </address>
+      </li>
+
+      <li class="contact-item">
+        <a href="mailto:support.center@woodex.co" class="contact-link">support.center@woodex.co</a>
+      </li>
+
+      <li class="contact-item">
+        <a href="tel:00001235567890" class="contact-link">(0000) 1235 567890</a>
+      </li>
+
+    </ul>
+
+    <div class="social-wrapper">
+
+      <p class="social-list-title">Follow US On Socials</p>
+
+      <ul class="social-list">
+
+        <li>
+          <a href="#" class="social-link">
+            <ion-icon name="logo-facebook"></ion-icon>
+          </a>
+        </li>
+
+        <li>
+          <a href="#" class="social-link">
+            <ion-icon name="logo-twitter"></ion-icon>
+          </a>
+        </li>
+
+        <li>
+          <a href="#" class="social-link">
+            <ion-icon name="logo-tumblr"></ion-icon>
+          </a>
+        </li>
+
+      </ul>
+
+    </div>
+
+  </div>
+
+  <div class="overlay" data-overlay data-nav-toggler></div>
+
+
+
+
+
+  <main>
+    <article>
+
+      <!-- 
+        - #HERO
+      -->
+
+      <section class="section hero" id="home" aria-label="home">
+        <div class="container">
+
+          <ul class="hero-list">
+
+            <li>
+              {% for product in products %}
+              <div class="hero-card">
+                {% if product.id == 3 %}
+                  <figure class="card-banner img-holder" style="--width: 285; --height: 396;">
+                    {% for image in product.product_images.all %}
+                    <!-- Hiển thị ảnh của sản phẩm -->
+                    <a href="{% url 'product' id=product.id %}" style="--width: 285; --height: 396;">
+                      <img src=" {{image.image_url}}" width="285" height="396" alt="Art Deco Home"
+                      class="img-cover">
+                    </a>
+                    {% endfor %}
+                  </figure>
+                <div class="card-content">
+                  <h3>
+                    <a href="{% url 'product' id=product.id %}" class="card-title">{{product.name}}</a>
+                  </h3>
+
+                  <p class="card-text">{{product.category_id.name}}</p>
+                </div>
+              </div>
+              {% endif%}
+              {% endfor %}
+              
+            </li>
+
+            <li class="colspan-2">
+              {% for product in products %}
+              <div class="hero-card">
+                {% if product.id == 4 %}
+                <figure class="card-banner img-holder" style="--width: 568; --height: 389;">
+                  {% for image in product.product_images.all %}
+                  <a href="{% url 'product' id=product.id %}" style="--width: 568; --height: 389;">
+                    <img src=" {{image.image_url}} " width="568" height="389" alt="Helen Chair"
+                    class="img-cover">
+                  </a>
+                  
+                  {% endfor %}
+                </figure>
+
+                <div class="card-content">
+                  <h3>
+                    <a href="{% url 'product' id=product.id %}" class="card-title">{{product.name}}</a>
+                  </h3>
+
+                  <p class="card-text">{{product.category_id.name}}</p>
+                </div>
+              </div>
+              {% endif%}
+              {% endfor %}
+            </li>
+
+            <li>
+              {% for product in products %}
+              <div class="hero-card">
+                {% if product.id == 5 %}
+                  <figure class="card-banner img-holder" style="--width: 285; --height: 396;">
+                    {% for image in product.product_images.all %}
+                    <!-- Hiển thị ảnh của sản phẩm -->
+                    <a href="{% url 'product' id=product.id %}" style="--width: 285; --height: 396;">
+                      <img src=" {{image.image_url}}" width="285" height="396" alt="Art Deco Home"
+                      class="img-cover">
+                    </a>
+                    {% endfor %}
+                  </figure>
+                <div class="card-content">
+                  <h3>
+                    <a href="{% url 'product' id=product.id %}" class="card-title">{{product.name}}</a>
+                  </h3>
+
+                  <p class="card-text">{{product.category_id.name}}</p>
+                </div>
+              </div>
+              {% endif%}
+              {% endfor %}
+              
+            </li>
+
+            <li class="colspan-2">
+              {% for product in products %}
+              <div class="hero-card">
+                {% if product.id == 6 %}
+                <figure class="card-banner img-holder" style="--width: 580; --height: 213;">
+                  {% for image in product.product_images.all %}
+                  <a href="{% url 'product' id=product.id %}" style="--width: 580; --height: 213;">
+                    <img src="{{image.image_url}}" width="580" height="213" alt="Wood Eggs"
+                    class="img-cover">
+                  </a>
+                  {% endfor %}
+                </figure>
+
+                <div class="card-content">
+                  <h3>
+                    <a href="{% url 'product' id=product.id %}" class="card-title">{{product.name}}</a>
+                  </h3>
+
+                  <p class="card-text">{{product.category_id.name}}</p>
+                </div>
+              </div>
+              {% endif%}
+              {% endfor %}
+            </li>
+            <li class="colspan-2">
+              {% for product in products %}
+              <div class="hero-card">
+                {% if product.id == 7 %}
+                <figure class="card-banner img-holder" style="--width: 580; --height: 213;">
+                  {% for image in product.product_images.all %}
+                  <a href="{% url 'product' id=product.id %}" style="--width: 580; --height: 213;">
+                    <img src="{{image.image_url}}" width="580" height="213" alt="Wood Eggs"
+                    class="img-cover">
+                  </a>
+                  {% endfor %}
+                </figure>
+
+                <div class="card-content">
+                  <h3>
+                    <a href="{% url 'product' id=product.id %}" class="card-title">{{product.name}}</a>
+                  </h3>
+
+                  <p class="card-text">{{product.category_id.name}}</p>
+                </div>
+              </div>
+              {% endif%}
+              {% endfor %}
+            </li>
+           
+
+          </ul>
+
+        </div>
+      </section>
+
+
+
+
+
+      <!-- 
+        - #ABOUT
+      -->
+
+      <section class="section about" id="about" aria-label="about">
+        <div class="container">
+
+          <h2 class="section-title">Woodex Store</h2>
+
+          <p class="section-text">
+            Khi bạn bắt đầu với một bức chân dung và tìm kiếm một hình thức thuần túy, một khối lượng rõ ràng, thông qua việc loại bỏ liên tục,
+            bạn đến
+            chắc chắn là ở quả trứng. Tương tự như vậy, bắt đầu với quả trứng và làm theo quá trình ngược lại, một
+            kết thúc với
+            chân dung.
+          </p>
+
+          <div class="about-card">
+            <figure class="card-banner img-holder" style="--width: 1170; --height: 450;">
+              {% for product in products|slice:"0:1" %}
+              {% for image in product.product_images.all %}
+              <img src="{{image.image_url}}" width="1170" height="450" loading="lazy" alt="Woodex promo"
+                class="img-cover">
+              {% endfor %}
+              {% endfor %}
+            </figure>
+
+            <button class="play-btn" aria-label="play video">
+              <ion-icon name="play-circle-outline" aria-hidden="true"></ion-icon>
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+
+
+
+
+      <!-- 
+        - #PRODUCTS
+      -->
+
+      <section class="section product" id="product" aria-label="product">
+        <div class="container">
+
+          <div class="title-wrapper">
+            <h2 class="h2 section-title">Sản phẩm phổ biến</h2>
+
+            <ul class="filter-btn-list">
+                
+              <li class="filter-btn-item">
+                <button class="filter-btn active" data-filter-btn="all">Tất cả sản phẩm</button>
+              </li>
+              {% for category in categorys %}
+              <li class="filter-btn-item">
+                <button class="filter-btn" data-filter-btn="{{category.slug}}">{{category.name}}</button>
+              </li>
+              {% endfor %}
+            
+
+            </ul>
+          </div>
+
+          <ul class="grid-list product-list" data-filter="all">
+            {% for product in products %}
+            <li class="{{product.category_id.slug}}">
+              <div class="product-card">
+                {% for image in product.product_images.all %}
+                <a class="card-banner img-holder has-before" style="--width: 300; --height: 300;">
+                  <img src="{{image.image_url}}" width="300" height="300" loading="lazy"
+                    alt="Animi Dolor Pariatur" class="img-cover">
+                {% endfor %}
+                {% if product.amount != 0%}
+                  <ul class="card-action-list">
+
+                    <li>
+                      <button class="card-action-btn" aria-label="add to cart" title="add to cart" onclick="addToCart({{ product.id }})">
+                        <ion-icon name="add-outline" aria-hidden="true"></ion-icon>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button class="card-action-btn" aria-label="add to cart" title="add to cart" onclick="addToCartPage({{ product.id }})">
+                        <ion-icon name="bag-handle-outline" aria-hidden="true"></ion-icon>
+                      </button>
+                    </li>
+
+                  </ul>
+                {% endif %}
+                  <ul class="badge-list">
+                    {% if product.discount != 0 %}
+                    <li>
+                      <div class="badge orange">Sale</div>
+                    </li>
+                    <li>
+                      <div class="badge cyan">-{{product.discount}}%</div>
+                    </li>
+                    {% endif %}
+                  </ul>
+                  {% if product.amount == 0%}
+                  <div class="card-badge">Out of Stock</div>
+                  {% endif %}
+                </a>
+
+                <div class="card-content">
+                  <h3 class="h3">
+                    <a href="{% url 'product' id=product.id %}" class="card-title">{{product.name}}</a>
+                  </h3>
+                
+                  <div class="card-price">
+                    <data class="price">{{product.unit}}</data>  
+                    {% if product.discount == 0 %}
+                      <data class="price" id="discounted-price-{{ product.id }}" value="10">{{product.price}}</data>
+                      <script>
+                        var price = {{ product.price }};
+                        document.getElementById("discounted-price-{{ product.id }}").innerText = price;
+                    </script>
+                    {% else %} 
+                      <del class="del" id="price-{{ product.id }}""></del>
+                      <data class="price" id="discounted-price-{{ product.id }}" value="10"></data>
+                      <script>
+                        var price = {{ product.price }};
+                        var discount = {{ product.discount }};
+                        var discountedPrice = price - (price * discount / 100);
+                        document.getElementById("discounted-price-{{ product.id }}").innerText = discountedPrice;
+                        document.getElementById("price-{{ product.id }}").innerText = price;
+                    </script>
+                    {% endif %}
+                  </div>
+
+                </div>
+
+              </div>
+            </li>
+           
+            {% endfor %}
+           
+
+          </ul>
+
+        </div>
+      </section>
+
+
+
+
+
+      <!-- 
+        - #BLOG
+      -->
+
+      <section class="section blog" id="blog" aria-label="blog">
+        <div class="container">
+
+          <div class="title-wrapper">
+            <h2 class="h2 section-title">Khám phá blog của chúng tôi</h2>
+
+            <a href="#" class="btn-link">
+              <span class="span">Xem tất cả</span>
+
+              <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+            </a>
+          </div>
+
+          <ul class="grid-list">
+            {% for blog in blogs %}
+            <li>
+              <div class="blog-card">
+
+                <div class="card-banner img-holder" style="--width: 374; --height: 243;">
+                  <img src="{{blog.image_url}}" width="374" height="243" loading="lazy"
+                    alt="Unique products that will impress your home in 2022." class="img-cover">
+
+                  <a href="{% url 'blog' id=blog.id %}" class="card-btn">
+                    <span class="span">Xem thêm</span>
+                    <ion-icon name="add-outline" aria-hidden="true"></ion-icon>
+                  </a>
+                </div>
+
+                <div class="card-content">
+
+                  <h3 class="h3">
+                    <a href="{% url 'blog' id=blog.id %}" class="card-title">{{blog.name}}</a>
+                  </h3>
+
+                  <ul class="card-meta-list">
+
+                    <li class="card-meta-item">
+                      <time class="card-meta-text" datetime="2022-09-27">{{blog.created_at}}</time>
+                    </li>
+                  </ul>
+
+                </div>
+
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+
+        </div>
+      </section>
+
+
+
+
+
+      <!-- 
+        - #NEWSLETTER
+      -->
+
+      <section class="section newsletter" aria-label="newsletter">
+        <div class="container">
+
+          <div class="newsletter-card">
+
+            <div class="card-content">
+              <h2 class="h2 section-title">Our Newsletter</h2>
+
+              <p class="section-text">
+                Subscribe our newsletter and get discount 50% off
+              </p>
+            </div>
+
+            <form action="" class="card-form">
+              <input type="email" name="email_address" placeholder="Your email address" required class="email-field">
+
+              <button type="submit" class="newsletter-btn" aria-label="subscribe">
+                <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+              </button>
+            </form>
+
+          </div>
+
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+
+
+
+
+  <!-- 
+    - #FOOTER
+  -->
+
+  <footer class="footer">
+    <div class="container">
+
+      <div class="footer-top section">
+
+        <div class="footer-brand">
+
+          <a href="#" class="logo">Woodex</a>
+
+          <ul>
+
+            <li class="footer-list-item">
+              <ion-icon name="location-sharp" aria-hidden="true"></ion-icon>
+
+              <address class="address">
+                Woodex, DaNang, VietNam 2024
+              </address>
+            </li>
+
+            <li class="footer-list-item">
+              <ion-icon name="call-sharp" aria-hidden="true"></ion-icon>
+
+              <a href="tel:+1234567890" class="footer-link">+84362696258</a>
+            </li>
+
+            <li>
+              <ul class="social-list">
+
+                <li>
+                  <a href="https://www.facebook.com/" class="social-link">
+                    <ion-icon name="logo-facebook"></ion-icon>
+                  </a>
+                </li>
+
+                <li>
+                  <a href="https://twitter.com/?lang=vi" class="social-link">
+                    <ion-icon name="logo-twitter"></ion-icon>
+                  </a>
+                </li>
+
+                <li>
+                  <a href="https://www.tumblr.com/" class="social-link">
+                    <ion-icon name="logo-tumblr"></ion-icon>
+                  </a>
+                </li>
+
+              </ul>
+            </li>
+
+          </ul>
+
+        </div>
+
+        <ul class="footer-list">
+
+          <li>
+            <p class="footer-list-title">Help & Information</p>
+          </li>
+
+          <li>
+            <a href="#" class="footer-link">Help & Contact Us</a>
+          </li>
+
+          <li>
+            <a href="#" class="footer-link">Returns & Refunds</a>
+          </li>
+
+          <li>
+            <a href="#" class="footer-link">Online Stores</a>
+          </li>
+
+          <li>
+            <a href="#" class="footer-link">Terms & Conditions</a>
+          </li>
+
+        </ul>
+
+        <ul class="footer-list">
+
+          <li>
+            <p class="footer-list-title">About Us</p>
+          </li>
+
+          <li>
+            <a href="#" class="footer-link">About Us</a>
+          </li>
+
+          <li>
+            <a href="#" class="footer-link">What We Do</a>
+          </li>
+
+          <li>
+            <a href="#" class="footer-link">FAQ Page</a>
+          </li>
+
+          <li>
+            <a href="#" class="footer-link">Contact Us</a>
+          </li>
+
+        </ul>
+
+        <div class="footer-list">
+
+          <p class="footer-list-title">Newsletter</p>
+
+          <form action="" class="footer-form">
+            <input type="email" name="email_address" placeholder="Your email address" required class="email-field">
+
+            <button type="submit" class="footer-form-btn">
+              <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+            </button>
+          </form>
+
+          <div class="wrapper">
+
+            <a href="#" class="footer-link">Term & Condition</a>
+            <a href="#" class="footer-link">Policy</a>
+            <a href="#" class="footer-link">Map</a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+
+        <p class="copyright">
+          &copy; 2022 All Rights Reserved by <a href="#" class="copyright-link">codewithsadee</a>.
+        </p>
+
+      </div>
+
+    </div>
+  </footer>
+
+
+
+
+
+  <!-- 
+    - #BACK TO TOP
+  -->
+
+  <a href="#top" class="back-top-btn" aria-label="back to top" data-back-top-btn>
+    <ion-icon name="arrow-up" aria-hidden="true"></ion-icon>
+  </a>
+
+
+
+
+
+  <!-- 
+    - custom js link
+  -->
+  <script src="{% static 'js_t/script.js'%}" defer></script>
+
+  <!-- 
+    - ionicon link
+  -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script>
+    const searchInput = document.getElementById('searchInput');
+
+    searchInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            const query = searchInput.value.trim();
+            if (query !== '') {
+                window.location.href = `/search/?query=${query}`;
+            }
+        }
+    });
+            // Lấy thẻ modal và nút để mở modal
+        var modal = document.getElementById("myModal");
+        var btn = document.getElementById("openModalBtn");
+        // Khi người dùng click vào nút, mở modal
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+        window.addEventListener("click", function(event) {
+          // Kiểm tra xem phần tử được click có phải là cửa sổ modal hay không
+          if (event.target !== modal && event.target !== btn) {
+            // Nếu phần tử được click không phải là cửa sổ modal, đóng cửa sổ modal
+            modal.style.display = "none";
+          }
+        });
+      function updateCartItem() {
+        var itemCountElement = document.getElementById("cartItemCount");
+        var currentItemCount = parseInt(itemCountElement.innerText);
+          var newTotalItemCount = currentItemCount + 1; // Cộng thêm 1 vào số lượng hiện tại
+          // Lấy số lượng hiện tại từ phần tử HTML
+    
+        // Cập nhật số lượng sản phẩm trong giỏ hàng trên giao diện người dùng
+        itemCountElement.innerText = newTotalItemCount;
+       }
+        function addToCart(productId) {
+          fetch(`/add/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'  // Thêm CSRF token vào header
+            },
+            body: JSON.stringify({})  // Không gửi bất kỳ dữ liệu nào trong body
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Product added to cart successfully.');
+                // Thực hiện các hành động khác sau khi sản phẩm được thêm vào giỏ hàng
+                updateCartItem();
+            } else {
+                console.error('Error adding product to cart.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+      }
+      function addToCartPage(productId) {
+          fetch(`/add/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'  // Thêm CSRF token vào header
+            },
+            body: JSON.stringify({})  // Không gửi bất kỳ dữ liệu nào trong body
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Product added to cart successfully.');
+                updateCartItem();
+                redirectToCartPage(productId); // Chuyển hướng sang trang giỏ hàng sau khi thêm sản phẩm thành công
+            } else {
+                console.error('Error adding product to cart.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });    
+    }
+    
+    function redirectToCartPage(id) {
+        // Thay đổi URL để chuyển hướng sang trang giỏ hàng
+        window.location.href = `/product/${id}/`; // Thay '/cart' bằng URL của trang giỏ hàng của bạn
+    }
+  
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,631 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Material Design for Bootstrap</title>
+    <!-- MDB icon -->
+    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+    />
+    <!-- Google Fonts Roboto -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+    />
+    <!-- MDB -->
+    <link
+      rel="stylesheet"
+      href="{% static 'css_t/bootstrap-shopping-carts.min.css'%}"
+    />
+    <link rel="stylesheet" href="{% static 'css_t/styles.css' %}" />
+  </head>
+
+  <body>
+    <!-- Start your project here-->
+    <style>
+      @media (min-width: 1025px) {
+        .h-custom {
+          height: 100vh !important;
+          margin-top: 100px;
+        }
+      }
+
+      .number-input input[type="number"] {
+        -webkit-appearance: textfield;
+        -moz-appearance: textfield;
+        appearance: textfield;
+      }
+
+      .number-input input[type="number"]::-webkit-inner-spin-button,
+      .number-input input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+      }
+
+      .number-input button {
+        -webkit-appearance: none;
+        background-color: transparent;
+        border: none;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        margin: 0;
+        position: relative;
+      }
+
+      .number-input button:before,
+      .number-input button:after {
+        display: inline-block;
+        position: absolute;
+        content: "";
+        height: 2px;
+        transform: translate(-50%, -50%);
+      }
+
+      .number-input button.plus:after {
+        transform: translate(-50%, -50%) rotate(90deg);
+      }
+
+      .number-input input[type="number"] {
+        text-align: center;
+      }
+
+      .number-input.number-input {
+        border: 1px solid #ced4da;
+        width: 10rem;
+        border-radius: 0.25rem;
+      }
+
+      .number-input.number-input button {
+        width: 2.6rem;
+        height: 0.7rem;
+        padding-top: 15px;
+      }
+
+      .number-input.number-input button.minus {
+        padding-left: 10px;
+        padding-top: 15px;
+      }
+
+      .number-input.number-input button:before,
+      .number-input.number-input button:after {
+        width: 0.7rem;
+        background-color: #495057;
+      }
+
+      .number-input.number-input input[type="number"] {
+        max-width: 4rem;
+        padding: 0.5rem;
+        border: 1px solid #ced4da;
+        border-width: 0 1px;
+        font-size: 1rem;
+        height: 2rem;
+        color: #495057;
+      }
+
+      @media not all and (min-resolution: 0.001dpcm) {
+        @supports (-webkit-appearance: none) and (stroke-color: transparent) {
+          .number-input.def-number-input.safari_only button:before,
+          .number-input.def-number-input.safari_only button:after {
+            margin-top: -0.3rem;
+          }
+        }
+      }
+
+      .shopping-cart .def-number-input.number-input {
+        border: none;
+        display: flex;
+      }
+
+      .shopping-cart .def-number-input.number-input input[type="number"] {
+        max-width: 3rem;
+        border: none;
+      }
+
+      .shopping-cart
+        .def-number-input.number-input
+        input[type="number"].black-text,
+      .shopping-cart
+        .def-number-input.number-input
+        input.btn.btn-link[type="number"],
+      .shopping-cart
+        .def-number-input.number-input
+        input.md-toast-close-button[type="number"]:hover,
+      .shopping-cart
+        .def-number-input.number-input
+        input.md-toast-close-button[type="number"]:focus {
+        color: #212529 !important;
+      }
+
+      .shopping-cart .def-number-input.number-input button {
+        width: 1rem;
+      }
+
+      .shopping-cart .def-number-input.number-input button:before,
+      .shopping-cart .def-number-input.number-input button:after {
+        width: 0.5rem;
+      }
+
+      .shopping-cart .def-number-input.number-input button.minus:before,
+      .shopping-cart .def-number-input.number-input button.minus:after {
+        background-color: #9e9e9e;
+      }
+
+      .shopping-cart .def-number-input.number-input button.plus:before,
+      .shopping-cart .def-number-input.number-input button.plus:after {
+        background-color: #4285f4;
+      }
+    
+      header {
+        font-size: 15px;
+      }
+      header .logo {
+        font-size: 25px;
+      }
+      body {
+        background-color: var(--white);
+        color: var(--black);
+        font-size: 1.6rem;
+        line-height: 1.7;
+      }
+
+      body.active {
+        overflow: hidden;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        top: 70px;
+        left:79%;
+        width: 200px;
+        height: 80px;
+        overflow: auto;
+        background-color: grey;
+      }
+
+      /* CSS cho nội dung của cửa sổ modal */
+      .modal-content {
+        background-color: #fefefe;
+        border: 1px solid #888;
+        width: 100%;
+      }
+
+      /* CSS cho nút đóng modal */
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .logo {
+        font-size: 1.8rem;
+        font-weight: var(--fw-700);
+      }
+      .p-p {
+        display: flex;
+      }
+      .modal-icon {
+        margin: 5px 5px 5px 10px;
+        display: flex;
+        width: 190px;
+        height: 25px;
+      }
+      .modal-icon img {
+        margin-right: 5px;
+        width: 25px;
+        height: 25px;
+      }
+      #cartItemCount{
+        font-size:12px;
+        bottom:1px;
+      }
+    </style>
+    <header class="header" data-header>
+      <div class="container">
+        <div class="input-wrapper">
+          <input
+            type="search"
+            name="search"
+            placeholder="Search Anything..."
+            class="input-field"
+            id="searchInput"
+          />
+
+          <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
+        </div>
+
+        <a href="/" class="logo">Woodex</a>
+
+        <div class="header-action">
+          {% if username %}
+          <p id="openModalBtn">{{username}}</p>
+          <div id="myModal" class="modal">
+            <div class="modal-content">
+              <a class="modal-icon" href="{% url 'info' %}"
+                ><img src="{% static 'images/id-card.png' %} " />Thông tin cá
+                nhân</a
+              >
+              <a class="modal-icon" href="{% url 'logout' %}"
+                ><img src="{% static 'images/logout.png' %}" />Đăng xuất</a
+              >
+              <a class="modal-icon" href="{% url 'user_order' %}"><img src="{% static 'images/id-card.png' %}">Order</a>
+
+            </div>
+          </div>
+          {% else %}
+          <button class="header-action-btn" aria-label="user">
+            <a href="{% url 'login' %}"
+              ><ion-icon name="person-outline" aria-hidden="true"></ion-icon
+            ></a>
+          </button>
+          {% endif %} {% if username %}
+          <button class="header-action-btn" aria-label="cart">
+            <a href="{% url 'cart' %}">
+              <ion-icon name="bag-handle-outline" aria-hidden="true"></ion-icon>
+            </a>
+            <span class="btn-badge" id="cartItemCount">{{total_quantity}}</span>
+          </button>
+          {% else %}
+          <button class="header-action-btn" aria-label="cart">
+            <ion-icon name="bag-handle-outline" aria-hidden="true"></ion-icon>
+          </button>
+          {% endif %}
+          <button
+            class="header-action-btn"
+            aria-label="open menu"
+            data-nav-toggler
+          >
+            <ion-icon name="menu-outline" aria-hidden="true"></ion-icon>
+          </button>
+        </div>
+      </div>
+    </header>
+    <section class="h-100 h-custom" style="background-color: #eee">
+      <div class="container h-100 py-5">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col">
+            <div class="card shopping-cart" style="border-radius: 15px">
+              <div class="card-body text-black">
+                <div class="row">
+                  <div class="col-lg-6 px-5 py-4">
+                    <h3 class="mb-5 pt-2 text-center fw-bold text-uppercase">
+                      Your products
+                    </h3>
+                    {% for item in list_item %}
+                    <div class="d-flex align-items-center mb-5">
+                      <div class="flex-shrink-0">
+                        {% for image in item.product_id.product_images.all %}
+                        <img
+                          src="{{image.image_url}}"
+                          class="img-fluid"
+                          style="width: 150px"
+                          alt="Generic placeholder image"
+                        />
+                        {% endfor %}
+                      </div>
+                      <div class="flex-grow-1 ms-3">
+                        <a class="float-end text-black" onclick="delCart({{item.product_id.id}})""
+                          ><i class="fas fa-times"></i
+                        ></a>
+                        <h5 class="text-primary">{{item.product_id.name}}</h5>
+                        <div class="d-flex align-items-center">
+                          <p class="fw-bold mb-0 me-5 pe-3">
+                            <span
+                              id="discounted-price-{{ item.product_id.id }}"
+                            ></span
+                            >{{ item.product_id.unit }}
+                          </p>
+                          <script>
+                            var price = {{ item.product_id.price }};
+                            var discount = {{ item.product_id.discount }};
+                            var discountedPrice = price - (price * discount / 100);
+                            document.getElementById("discounted-price-{{ item.product_id.id }}").innerText = discountedPrice;
+                          </script>
+                          <div
+                            class="def-number-input number-input safari_only"
+                          >
+                            <button
+                              onclick="this.parentNode.querySelector('input[type=number]').stepDown();deltoCart({{item.product_id.id}});minusCartItem({{item.product_id.price}})"
+                              class="minus"
+                            ></button>
+                            <input
+                              class="quantity fw-bold text-black"
+                              min="0"
+                              name="quantity"
+                              value="{{item.quantity}}"
+                              type="number"
+                            />
+                            <button
+                              onclick="this.parentNode.querySelector('input[type=number]').stepUp();addCart({{item.product_id.id}});sumCartItem({{item.product_id.price}})"
+                              class="plus"
+                            ></button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+
+                    <hr
+                      class="mb-4"
+                      style="height: 2px; background-color: #1266f1; opacity: 1"
+                    />
+                    <div
+                      class="d-flex justify-content-between p-2 mb-2"
+                      style="background-color: #e1f5fe"
+                    >
+                      <h5 class="fw-bold mb-0">Total:</h5>
+                      <div class="d-flex">
+                        <h5 class="fw-bold mb-0" id="total"></h5>
+                        <h5>VND</h5>
+                      </div>
+                      <script>
+                        var price ={{total_price}};
+                        document.getElementById("total").innerText = price;
+                      </script>
+          
+                    </div>
+                  </div>
+                  <div class="col-lg-6 px-5 py-4">
+                    <h3 class="mb-5 pt-2 text-center fw-bold text-uppercase">
+                      Order
+                    </h3>
+
+                    <form class="mb-5" action="{% url 'place_order' %}" method="POST">
+                      {% csrf_token %}
+                      <div class="form-outline mb-5">
+                        <label class=""  
+                        >Name</label
+                      >
+                        <input
+                          type="text"
+                          id="typeText"
+                          class="form-control form-control-lg"
+                          siez="17"
+                          
+                          name="receiver_name"
+                          required
+                        />
+                       
+                      </div>
+
+                      <div class="form-outline mb-5">
+                        <label class=""
+                          >Phone</label
+                        >
+                        <input
+                          type="text"
+                          id="typeName"
+                          class="form-control form-control-lg"
+                          siez="17"
+                          name="receiver_phone"
+                    
+                          required
+                        />
+                        
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-6 mb-5">
+                         
+                          <div class="form-outline">
+                            <label class="form-label"
+                            >Address</label
+                          >
+                            <input
+                              type="text"
+                              id="typeExp"
+                              class="form-control form-control-lg"
+                              name="receiver_address"
+                             
+                              size="7"
+                              id="exp"
+                              required
+                            />
+                          
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row mb-4">
+                        <label class="form-label"
+                        >Note</label
+                      >
+                      <textarea id="myTextArea" rows="4" cols="30" name="description">
+                        
+                      </textarea>
+                      </div>
+                     
+
+                      <button
+                        type="submit"
+                        class="btn btn-primary btn-block btn-lg"
+                      >
+                        Buy now
+                      </button>
+
+                      <h5
+                        class="fw-bold mb-5"
+                        style="position: absolute; bottom: 0"
+                      >
+                        <a href="/"
+                          ><i class="fas fa-angle-left me-2"></i>Back to
+                          shopping</a
+                        >
+                      </h5>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- End your project here-->
+
+    <!-- MDB -->
+    <script type="text/javascript" src="{% static 'js/mdb.min.js'%}"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript"></script>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+    <script>
+      const searchInput = document.getElementById('searchInput');
+
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                const query = searchInput.value.trim();
+                if (query !== '') {
+                    window.location.href = `/search/?query=${query}`;
+                }
+            }
+        });
+      // Lấy thẻ modal và nút để mở modal
+      var modal = document.getElementById("myModal");
+      var btn = document.getElementById("openModalBtn");
+      // Khi người dùng click vào nút, mở modal
+      btn.onclick = function () {
+        modal.style.display = "block";
+      };
+      window.addEventListener("click", function (event) {
+        // Kiểm tra xem phần tử được click có phải là cửa sổ modal hay không
+        if (event.target !== modal && event.target !== btn) {
+          // Nếu phần tử được click không phải là cửa sổ modal, đóng cửa sổ modal
+          modal.style.display = "none";
+        }
+      });
+      function updateCartItem() {
+        var itemCountElement = document.getElementById("cartItemCount");
+        var currentItemCount = parseInt(itemCountElement.innerText);
+        var newTotalItemCount = currentItemCount + 1;
+        // Lấy số lượng hiện tại từ phần tử HTML
+
+        // Cập nhật số lượng sản phẩm trong giỏ hàng trên giao diện người dùng
+        itemCountElement.innerText = newTotalItemCount;
+      }
+      function sumCartItem(price) {
+        var itemElement = document.getElementById("total");
+        var currentCount = parseInt(itemElement.innerText);
+        var newTotalCount = currentCount + price ;
+        // Lấy số lượng hiện tại từ phần tử HTML
+
+        // Cập nhật số lượng sản phẩm trong giỏ hàng trên giao diện người dùng
+        itemElement.innerText = newTotalCount;
+      }
+      function minusCartItem(price) {
+        var itemElement = document.getElementById("total");
+        var currentCount = parseInt(itemElement.innerText);
+        var newTotalCount = currentCount - price ;
+        // Lấy số lượng hiện tại từ phần tử HTML
+
+        // Cập nhật số lượng sản phẩm trong giỏ hàng trên giao diện người dùng
+        itemElement.innerText = newTotalCount;
+      }
+      function delCartItem() {
+        var itemCountElement = document.getElementById("cartItemCount");
+        var currentItemCount = parseInt(itemCountElement.innerText);
+        var newTotalItemCount = currentItemCount - 1;
+        // Lấy số lượng hiện tại từ phần tử HTML
+
+        // Cập nhật số lượng sản phẩm trong giỏ hàng trên giao diện người dùng
+        itemCountElement.innerText = newTotalItemCount;
+        if (newTotalItemCount == 0) {
+            redirectToCartPage();
+        };
+      }
+      function delCart(productId) {
+        fetch(`/remove/${productId}/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}", // Thêm CSRF token vào header
+          },
+          body: JSON.stringify({}), // Không gửi bất kỳ dữ liệu nào trong body
+        })
+          .then((response) => {
+            if (response.ok) {
+              console.log("Product  deltete cart successfully.");
+              // Thực hiện các hành động khác sau khi sản phẩm được thêm vào giỏ hàng
+            } else {
+              console.error("Error delete product to cart.");
+              redirectToCartPage(); 
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+      function addCart(productId) {
+        fetch(`/add/${productId}/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}", // Thêm CSRF token vào header
+          },
+          body: JSON.stringify({}), // Không gửi bất kỳ dữ liệu nào trong body
+        })
+          .then((response) => {
+            if (response.ok) {
+              console.log("Product  add cart successfully.");
+              updateCartItem();
+              // Thực hiện các hành động khác sau khi sản phẩm được thêm vào giỏ hàng
+            } else {
+              console.error("Error add product to cart.");
+              
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+      function deltoCart(productId) {
+        fetch(`/del/${productId}/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}", // Thêm CSRF token vào header
+          },
+          body: JSON.stringify({}), // Không gửi bất kỳ dữ liệu nào trong body
+        })
+          .then((response) => {
+            if (response.ok) {
+              console.log("Product  add cart successfully.");
+              delCartItem();
+              // Thực hiện các hành động khác sau khi sản phẩm được thêm vào giỏ hàng
+            } else {
+              console.error("Error add product to cart.");
+              
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+      function redirectToCartPage() {
+        // Thay đổi URL để chuyển hướng sang trang giỏ hàng
+        window.location.href = `/cart/`; // Thay '/cart' bằng URL của trang giỏ hàng của bạn
+      }
+    </script>
+  </body>
+</html>

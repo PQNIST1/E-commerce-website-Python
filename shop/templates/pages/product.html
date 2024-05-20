@@ -1,0 +1,488 @@
+{% load static %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {% comment %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    {% endcomment %}
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="{% static './images/favicon-32x32.png' %}"
+    />
+    <link rel="stylesheet" href="{% static 'css_t/main.css' %}" />
+    <link rel="stylesheet" href="{% static 'css_t/styles.css' %}" />
+    {% comment %}
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/focusable-lightbox.js"></script>
+    <script src="js/main.js" defer></script>
+    {% endcomment %}
+    <link
+      rel="shortcut icon"
+      href="{% static  'svg/favicon.svg'%}"
+      type="image/svg+xml"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mr+De+Haviland&family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        top: 70px;
+        width: 200px;
+        height: 80px;
+        overflow: auto;
+        background-color: grey;
+      }
+
+      /* CSS cho nội dung của cửa sổ modal */
+      .modal-content {
+        background-color: #fefefe;
+        border: 1px solid #888;
+        width: 100%;
+      }
+
+      /* CSS cho nút đóng modal */
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .logo {
+        font-size: 1.8rem;
+        font-weight: var(--fw-700);
+      }
+      .p-p {
+        display: flex;
+      }
+      .modal-icon {
+        margin: 5px 5px 5px 10px;
+        display: flex;
+        width: 190px;
+        height: 25px;
+      }
+      .modal-icon img {
+        margin-right: 5px;
+        width: 25px;
+        height: 25px;
+      }
+      #cartItemCount{
+        font-size:12px;
+        bottom:1px;
+      }
+    </style>
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="#">upgrade your browser</a> to improve your experience.
+      </p>
+    <![endif]-->
+    <header class="header" data-header>
+      <div class="container">
+        <div class="input-wrapper">
+          <input
+            type="search"
+            name="search"
+            placeholder="Search Anything..."
+            class="input-field"
+            id="searchInput"
+          />
+
+          <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
+        </div>
+
+        <a href="/" class="logo">Woodex</a>
+
+        <div class="header-action">
+          {% if username %}
+          <p id="openModalBtn">{{username}}</p>
+          <div id="myModal" class="modal">
+            <div class="modal-content">
+              <a class="modal-icon" href="{% url 'info' %}"
+                ><img src="{% static 'images/id-card.png' %} " />Thông tin cá
+                nhân</a
+              >
+              <a class="modal-icon" href="{% url 'logout' %}"
+                ><img src="{% static 'images/logout.png' %}" />Đăng xuất</a
+              >
+              <a class="modal-icon" href="{% url 'user_order' %}"><img src="{% static 'images/id-card.png' %}">Order</a>
+
+            </div>
+          </div>
+          {% else %}
+          <button class="header-action-btn" aria-label="user">
+            <a href="{% url 'login' %}"
+              ><ion-icon name="person-outline" aria-hidden="true"></ion-icon
+            ></a>
+          </button>
+          {% endif %} {% if username %}
+          <button class="header-action-btn" aria-label="cart">
+            <a href="{% url 'cart' %}">
+              <ion-icon name="bag-handle-outline" aria-hidden="true"></ion-icon>
+            </a>
+            <span class="btn-badge" id="cartItemCount">{{total_quantity}}</span>
+          </button>
+          {% else %}
+          <button class="header-action-btn" aria-label="cart">
+            <ion-icon name="bag-handle-outline" aria-hidden="true"></ion-icon>
+          </button>
+          {% endif %}
+          <button
+            class="header-action-btn"
+            aria-label="open menu"
+            data-nav-toggler
+          >
+            <ion-icon name="menu-outline" aria-hidden="true"></ion-icon>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main>
+      <article class="product">
+        <section
+          class="product__slider default-container"
+          aria-label="Product preview"
+        >
+          <div class="image-box" aria-label="Product preview" role="region">
+            {% for image in product.product_images.all %}
+            <img
+              src="{{image.image_url}}"
+              alt="Brown and white sneaker"
+              class="image-box__src"
+              data-product-id="item-cart-1"
+              tabindex="0"
+              aria-controls="lightbox"
+              aria-expanded="false"
+            />
+            {% endfor %}
+          </div>
+        </section>
+        <section
+          class="product__content default-container"
+          aria-label="Product content"
+        >
+          <div>
+            <h2 class="company-name" tabindex="0">Woodex Company</h2>
+            <p class="product__name" tabindex="0">
+              Autumn Limited Edition Sneakers
+            </p>
+            <h3 class="product__title" tabindex="0">{{product.name}}</h3>
+          </div>
+          <p class="product__description" tabindex="0">{{product.thumbnail}}</p>
+          <div class="product__price">
+            {% if product.discount != 0 %}
+            <div class="discount-price">
+              <p class="discount-price__value" tabindex="0">
+                <span id="discount-price__value"></span>{{product.unit}}
+              </p>
+              <p class="discount-price__discount" tabindex="0">
+                {{product.discount}}%
+              </p>
+            </div>
+
+            <div class="full-price">
+              <p tabindex="0" class="p-p">
+                <span id="price"></span>{{product.unit}}
+              </p>
+            </div>
+            <script>
+              var price = {{ product.price }};
+              var discount = {{ product.discount }};
+              var discountedPrice = price - (price * discount / 100);
+              document.getElementById("discount-price__value").innerText = discountedPrice;
+              document.getElementById("price").innerText = price;
+            </script>
+            {% endif %}
+            <div class="discount-price">
+              <p class="discount-price__value" tabindex="0">
+                <span id="discount-price__value"></span>{{product.unit}}
+              </p>
+            </div>
+            <script>
+              var price = {{ product.price }};
+              document.getElementById("discount-price__value").innerText = price;
+            </script>
+          </div>
+
+          <form action="#" class="cart-form">
+            <div
+              class="cart-form__input-container"
+              aria-label="Define the product quantity"
+            >
+              <button type="button" class="btn-changeValue minus-item">
+                <span class="sr-only">Minus one item</span>
+                <span class="icon icon-minus" aria-hidden="true"></span>
+              </button>
+              <label for="product__quantity" class="sr-only"
+                >Set the quantity manually</label
+              >
+              <input type="number" min="0" value="0" id="product__quantity" />
+              <button type="button" class="btn-changeValue plus-item">
+                <span class="sr-only">Plus one item</span>
+                <span class="icon icon-plus" aria-hidden="true"></span>
+              </button>
+            </div>
+            <button type="button" class="cart-form__add-btn">
+              <span class="icon icon-cart" aria-hidden="true"></span>
+              Add to cart
+            </button>
+          </form>
+        </section>
+      </article>
+    </main>
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-top section">
+          <div class="footer-brand">
+            <a href="#" class="logo">Woodex</a>
+
+            <ul>
+              <li class="footer-list-item">
+                <ion-icon name="location-sharp" aria-hidden="true"></ion-icon>
+
+                <address class="address">Woodex, Chicago, USA 2022</address>
+              </li>
+
+              <li class="footer-list-item">
+                <ion-icon name="call-sharp" aria-hidden="true"></ion-icon>
+
+                <a href="tel:+1234567890" class="footer-link">+1234567890</a>
+              </li>
+
+              <li>
+                <ul class="social-list">
+                  <li>
+                    <a href="#" class="social-link">
+                      <ion-icon name="logo-facebook"></ion-icon>
+                    </a>
+                  </li>
+
+                  <li>
+                    <a href="#" class="social-link">
+                      <ion-icon name="logo-twitter"></ion-icon>
+                    </a>
+                  </li>
+
+                  <li>
+                    <a href="#" class="social-link">
+                      <ion-icon name="logo-tumblr"></ion-icon>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <ul class="footer-list">
+            <li>
+              <p class="footer-list-title">Help & Information</p>
+            </li>
+
+            <li>
+              <a href="#" class="footer-link">Help & Contact Us</a>
+            </li>
+
+            <li>
+              <a href="#" class="footer-link">Returns & Refunds</a>
+            </li>
+
+            <li>
+              <a href="#" class="footer-link">Online Stores</a>
+            </li>
+
+            <li>
+              <a href="#" class="footer-link">Terms & Conditions</a>
+            </li>
+          </ul>
+
+          <ul class="footer-list">
+            <li>
+              <p class="footer-list-title">About Us</p>
+            </li>
+
+            <li>
+              <a href="#" class="footer-link">About Us</a>
+            </li>
+
+            <li>
+              <a href="#" class="footer-link">What We Do</a>
+            </li>
+
+            <li>
+              <a href="#" class="footer-link">FAQ Page</a>
+            </li>
+
+            <li>
+              <a href="#" class="footer-link">Contact Us</a>
+            </li>
+          </ul>
+
+          <div class="footer-list">
+            <p class="footer-list-title">Newsletter</p>
+
+            <form action="" class="footer-form">
+              <input
+                type="email"
+                name="email_address"
+                placeholder="Your email address"
+                required
+                class="email-field"
+              />
+
+              <button type="submit" class="footer-form-btn">
+                <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+              </button>
+            </form>
+
+            <div class="wrapper">
+              <a href="#" class="footer-link">Term & Condition</a>
+              <a href="#" class="footer-link">Policy</a>
+              <a href="#" class="footer-link">Map</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p class="copyright">
+            &copy; 2022 All Rights Reserved by
+            <a href="#" class="copyright-link">codewithsadee</a>.
+          </p>
+        </div>
+      </div>
+    </footer>
+    <script src="" async defer></script>
+    -->
+    <script src="{% static 'js_t/script.js'%}" defer></script>
+
+    <!-- 
+        - ionicon link
+      -->
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+    <script>
+      const searchInput = document.getElementById('searchInput');
+
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                const query = searchInput.value.trim();
+                if (query !== '') {
+                    window.location.href = `/search/?query=${query}`;
+                }
+            }
+        });
+      // Lấy thẻ modal và nút để mở modal
+      var modal = document.getElementById("myModal");
+      var btn = document.getElementById("openModalBtn");
+      // Khi người dùng click vào nút, mở modal
+      btn.onclick = function () {
+        modal.style.display = "block";
+      };
+      window.addEventListener("click", function (event) {
+        // Kiểm tra xem phần tử được click có phải là cửa sổ modal hay không
+        if (event.target !== modal && event.target !== btn) {
+          // Nếu phần tử được click không phải là cửa sổ modal, đóng cửa sổ modal
+          modal.style.display = "none";
+        }
+      });
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Lấy các phần tử DOM cần thiết
+        var quantityInput = document.getElementById('product__quantity');
+        var plusButton = document.querySelector('.plus-item');
+        var minusButton = document.querySelector('.minus-item');
+        var addToCartButton = document.querySelector('.cart-form__add-btn');
+    
+        // Thêm sự kiện click cho nút tăng số lượng
+        plusButton.addEventListener('click', function() {
+          quantityInput.value = Math.max(parseInt(quantityInput.value) + 1, 0);
+        });
+    
+        // Thêm sự kiện click cho nút giảm số lượng
+        minusButton.addEventListener('click', function() {
+          quantityInput.value = Math.max(parseInt(quantityInput.value) - 1, 0);
+        });
+    
+        // Thêm sự kiện click cho nút "Add to cart"
+        addToCartButton.addEventListener('click', function() {
+          var quantity = parseInt(quantityInput.value);
+          if (quantity > 0) {
+            var productId = {{product.id}}; // Thay YOUR_PRODUCT_ID bằng productId thực tế
+            addToCart(productId, quantity);
+          }
+        });
+        function updateCart(quantity) {
+          var itemCountElement = document.getElementById("cartItemCount");
+          var currentItemCount = parseInt(itemCountElement.innerText);
+          var newTotalItemCount = currentItemCount + quantity; // Cộng thêm 1 vào số lượng hiện tại
+            // Lấy số lượng hiện tại từ phần tử HTML
+      
+          // Cập nhật số lượng sản phẩm trong giỏ hàng trên giao diện người dùng
+          itemCountElement.innerText = newTotalItemCount;
+         }
+        // Hàm thêm vào giỏ hàng
+        function addToCart(productId, quantity) {
+          // Gửi productId và quantity đi, bạn có thể sử dụng fetch hoặc AJAX
+          var formData = {
+            quantity: quantity
+          };
+          fetch(`/add/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'  // Thêm CSRF token vào header
+            },
+            body: JSON.stringify(formData)  // Không gửi bất kỳ dữ liệu nào trong body
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Product added to cart successfully.');
+                updateCart(quantity);
+                window.location.href = `/cart/`;
+            } else {
+                console.error('Error adding product to cart.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });    
+        }
+      });
+    </script>
+    
+  </body>
+</html>

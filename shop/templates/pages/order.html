@@ -1,0 +1,197 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Order history - Bootdey.com</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css_t/styles.css' %}">
+
+    <style type="text/css">
+      body {
+        background: #eee;
+      }
+      .cust{
+        margin-top:100px;
+      }
+      .panel-order .row {
+        border-bottom: 1px solid #ccc;
+      }
+      .panel-order .row:last-child {
+        border: 0px;
+      }
+      .panel-order .row .col-md-1 {
+        text-align: center;
+        padding-top: 15px;
+      }
+      .panel-order .row .col-md-1 img {
+        width: 50px;
+        max-height: 50px;
+      }
+      .panel-order .row .row {
+        border-bottom: 0;
+      }
+      .panel-order .row .col-md-11 {
+        border-left: 1px solid #ccc;
+      }
+      .panel-order .row .row .col-md-12 {
+        padding-top: 7px;
+        padding-bottom: 7px;
+      }
+      .panel-order .row .row .col-md-12:last-child {
+        font-size: 11px;
+        color: #555;
+        background: #efefef;
+      }
+      .panel-order .btn-group {
+        margin: 0px;
+        padding: 0px;
+      }
+      .panel-order .panel-body {
+        padding-top: 0px;
+        padding-bottom: 0px;
+      }
+      .panel-order .panel-deading {
+        margin-bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"
+    />
+    <header class="header" data-header>
+        <div class="container">
+    
+          <div class="input-wrapper">
+            <input type="search" name="search" placeholder="Search Anything..." class="input-field" id="searchInput">
+    
+            <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
+          </div>
+    
+          <a href="/" class="logo">Woodex</a>
+    
+          <div class="header-action">
+    
+            {% if username %}
+                  <p id="openModalBtn"> {{username}}</p>
+                  <div id="myModal" class="modal">
+                    <div class="modal-content">
+                      <a class="modal-icon" href="{% url 'info' %}"><img src="{% static 'images/id-card.png' %} ">Thông tin cá nhân</a>
+                      <a class="modal-icon" href="{% url 'logout' %}"><img src="{% static 'images/logout.png' %}">Đăng xuất</a>
+                      <a class="modal-icon" href="{% url 'user_order' %}"><img src="{% static 'images/id-card.png' %}">Order</a>
+                    </div>
+                  </div>
+            {% else %}
+                <button class="header-action-btn" aria-label="user">
+                  <a href="{% url 'login' %}"><ion-icon name="person-outline" aria-hidden="true"></ion-icon></a>
+                </button>
+            {% endif %}
+            
+          
+            {% if username %}
+            <button class="header-action-btn" aria-label="cart">
+              <a href="{% url 'cart' %}"><ion-icon name="bag-handle-outline" aria-hidden="true"></ion-icon></a>
+              <span class="btn-badge" id="cartItemCount">{{total_quantity}}</span>
+            </button>
+            {% else %}
+            <button class="header-action-btn" aria-label="cart">
+              <ion-icon name="bag-handle-outline" aria-hidden="true"></ion-icon>
+            </button>
+            {% endif %}
+            <button class="header-action-btn" aria-label="open menu" data-nav-toggler>
+              <ion-icon name="menu-outline" aria-hidden="true"></ion-icon>
+            </button>
+    
+          </div>
+    
+        </div>
+      </header>
+    <div class="container bootdey">
+      <div class="panel panel-default panel-order cust">
+        <div class="panel-heading">
+          <strong>Order history</strong>
+          <div class="btn-group pull-right">
+            <div class="btn-group">
+              <button
+                type="button"
+                class="btn btn-default btn-xs dropdown-toggle"
+                data-toggle="dropdown"
+              >
+                Filter history <i class="fa fa-filter"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><a href="#">Approved orders</a></li>
+                <li><a href="#">Pending orders</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+            {% for detail in details%}
+          <div class="row">
+            <div class="col-md-1">
+                {% for image in detail.product_id.product_images.all %}
+              <img
+                src="{{image.image_url}}"
+                class="media-object img-thumbnail"
+              />
+              {% endfor %}
+            </div>
+            <div class="col-md-11">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="pull-right">
+                    <label class="label label-danger">rejected</label>
+                  </div>
+                  <span><strong>{{detail.product_id.name}}</strong></span>
+                  <span class="label label-info">{{detail.product_id.category_id.name}}</span><br />
+                  Quantity : {{detail.amount}}, cost: VND{{detail.price}}<br />
+                  <a
+                    data-placement="top"
+                    class="btn btn-success btn-xs glyphicon glyphicon-ok"
+                    href="{% url 'rating' product_id=detail.product_id.id %}"
+                    title="View"
+                  ></a>
+                  <a
+                    data-placement="top"
+                    class="btn btn-danger btn-xs glyphicon glyphicon-trash"
+                    href="#"
+                    title="Danger"
+                  ></a>
+                  <a
+                    data-placement="top"
+                    class="btn btn-info btn-xs glyphicon glyphicon-usd"
+                    href="#"
+                    title="Danger"
+                  ></a>
+                </div>
+                <div class="col-md-12">
+                  order made on: {{detail.created_at}} by <a href="#">{{detail.order_id.user_id.username}}</a>
+                </div>
+              </div>
+            </div>
+          </div>  
+          {% endfor %}   
+        </div>
+        <div class="panel-footer">
+          Put here some note for example: bootdey si a gallery of free bootstrap
+          snippets bootdeys
+        </div>
+      </div>
+    </div>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="{% static 'js_t/script.js'%}" defer></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript"></script>
+  </body>
+</html>
